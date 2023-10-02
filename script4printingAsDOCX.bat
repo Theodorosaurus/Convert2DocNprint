@@ -1,36 +1,34 @@
 @echo off
 
-cd C:\Program Files\Google\Chrome\Application\
+SET A=%SYSTEMDRIVE%
 
-start chrome_proxy.exe --profile-directory=Default --app=https://web.eu.restaurant-partners.com/orders --kiosk-printing --start-maximized --enable-safebrowsing-enhanced-protection
+"%A%\Program Files\ExampleInternetBrowser\Application\examplebrowser.exe" --profile-directory=Default --app=https://www.example.com/pdfs4download --kiosk-printing --start-maximized
 
 timeout /t 2 /nobreak >nul
 
 :y
 
-SET W="c:\users\%USERNAME%\Desktop\efood\*.pdf"
+SET W="%A%\users\%USERNAME%\Downloads\*.pdf"
 
 IF EXIST %W% (
-	cd C:\Users\%USERNAME%\Desktop\efood\pdf2word\
-	pdf2word.exe -matchLines on -in c:\Users\%USERNAME%\Desktop\efood\*.pdf -out c:\Users\%USERNAME%\Desktop\efood\printorder.docx
-	del /Q /F c:\Users\%USERNAME%\Desktop\efood\*.pdf
-	cd c:\program^ files\libreoffice\program\
-	swriter.exe -pt "HP DeskJet 2300 series" c:\Users\%USERNAME%\Desktop\efood\printorder.docx
-	del /Q /F c:\Users\%USERNAME%\Desktop\efood\printorder.docx
+	"%A%\users\%USERNAME%\Documents\examplepdf2wordconverter.exe" -input "%A%\Users\%USERNAME%\Downloads\*.pdf" -output "%A%:\Users\%USERNAME%\Downloads\example.docx"
+	del /Q /F "%A%\Users\%USERNAME%\Downloads\*.pdf"
+	"%A%\Program Files\libreoffice\program\swriter.exe" -pt "EXAMPLE PRINTER" "%A%\Users\%USERNAME%\Downloads\example.docx"
+	del /Q /F "%A%\Users\%USERNAME%\Downloads\example.docx"
 	timeout /t 5 /nobreak >nul
 	goto x
 )
 
 :x
-for /f "tokens=2" %%A in ('tasklist /NH /FI "imagename eq chrome.exe"') do (echo %%A > "c:\users\%username%\desktop\efood\chromePID.txt")
-set /P var=<"c:\users\%username%\desktop\efood\chromePID.txt"
+for /f "tokens=2" %%B in ('tasklist /NH /FI "imagename eq examplebrowser.exe"') do (echo %%B > "%A%\users\%username%\Documents\browserPID.txt")
+set /P var=<"%A%\users\%username%\Documents\browserPID.txt"
 tasklist /FI "PID EQ %var%"
 
 IF %errorlevel%==0 (
 	goto y
 )
 ELSE (
-	del c:\users\%username%\desktop\efood\chromePID.txt
+	del /Q /F "%A%\users\%username%\Documents\browserPID.txt"
 	goto :EOF
 )
 
