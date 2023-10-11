@@ -29,7 +29,7 @@ IF %errorlevel%==0 (
 )
 ELSE (
 	del /Q /F "%A%\users\%username%\Documents\browserPID.txt"
-	goto :EOF
+	goto EOF
 )
 
 :EOF
